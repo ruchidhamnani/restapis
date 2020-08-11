@@ -2,19 +2,14 @@ var express = require('express');
 var router = express.Router();
 const mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-// var booksSchema = require('./../models/schema/booksSchema');
-/* GET total count of books*/
-var booksSchema = new Schema({
-    bookname: String,
-    author: String,
-    genre: String,
-    price: Number,
-    dateOfPublish: Date,
-    noOfPages: Number,
-    forAgeAbove: Number,
-    totalQuantity: Number,
-    availableCopies: Number
-});
+
+
+
+var booksSchema = require('../models/schema/booksSchema')
+
+
+
+
 //get totalcount of books
 router.get('/totalcount', (req, res) => {
     var bookcount = mongoose.model('bookinformation', booksSchema);
@@ -55,10 +50,10 @@ router.get('/findbyauthor/:authorname', (req, res) => {
 
 
 });
-//pattern (wrong)
+//find by pattern 
 
 
-router.get('/findbyauthor/:pattern', (req, res) => {
+router.get('/findbypattern/:pattern', (req, res) => {
     var bookcount = mongoose.model('bookinformation', booksSchema);
     
 
@@ -119,7 +114,7 @@ router.get('/rentedcount', (req, res) => {
 });
 
 
-
+//Get the total amount of money spent by a user to rent books in last 100 days
 
 
 

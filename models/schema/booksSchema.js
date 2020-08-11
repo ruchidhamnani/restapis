@@ -1,5 +1,7 @@
-var utils = require("../../utils");
-var Schema = utils.mongoose.Schema;
+// var utils = require("../../utils");
+// var Schema = utils.mongoose.Schema;
+const mongoose = require('mongoose');
+var Schema = mongoose.Schema;
 var booksSchema = new Schema({
     bookname: String,
     author: String,
@@ -12,6 +14,6 @@ var booksSchema = new Schema({
     available_copies : Number
 });
 
-module.exports = {
-    schema: booksSchema
-};
+module.exports = booksSchema ;
+
+
