@@ -5,18 +5,16 @@ const { route } = require('./books');
 var Schema = mongoose.Schema;
 
 
-
+var utils = require('../models/businesslogic/utils')
 var booksSchema = require('../models/schema/booksSchema')
 
 //Update the price of a book
 router.get('/price',(req,res)=>{
-    var bookcount = mongoose.model('bookinformation', booksSchema);
-     bookcount.update({bookname : req.query.bookname}, {$set : {'price' : req.query.newprice}}, function(err,b){
-        if(err) res.send("error");
-        else{
-            res.send("Successfully Updated price")
-        }
-    })
+    var newprice = req.query.newprice;
+    var bookname = req.query.bookname;
+    utils.UpdatePrice(newprice,bookname).then(result => {
+        res.send({'result': result});
+    });
     
 })
 

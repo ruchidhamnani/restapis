@@ -7,46 +7,25 @@ var Schema = mongoose.Schema;
 
 var booksSchema = require('../models/schema/booksSchema')
 
+var utils = require('../models/businesslogic/utils')
 
 
 
 //get totalcount of books
 router.get('/totalcount', (req, res) => {
-    var bookcount = mongoose.model('bookinformation', booksSchema);
-    bookcount.aggregate([{
-        $group: {
-            _id: 0,
-            total: {
-                $sum: "$totalQuantity"
-            }
-        }
-    },
-        {
-        $project: {
-            _id: 0,
-            total: 1
-        }
-    }], function (err, result) {
-        console.log(result);
-        res.send({ 'result': result });
-
-        if (err) return handleError(err);
-    });
+      utils.Totalbookcount().then(result =>{
+        res.send({'totalcount' : result});
+      } );
+    
 
 });
 
 //get all the books of a given author
 router.get('/findbyauthor/:authorname', (req, res) => {
-    var bookcount = mongoose.model('bookinformation', booksSchema);
     var authorname = req.params.authorname
-
-    bookcount.find({ author: authorname }, 'bookname').exec(function (err, result) {
-
-        res.send({ 'result': result });
-
-        if (err) return handleError(err);
-    })
-
+    utils.FindByAuthor(authorname).then(result => {
+        res.send({'result' : result});
+    });
 
 
 });
@@ -54,15 +33,11 @@ router.get('/findbyauthor/:authorname', (req, res) => {
 
 
 router.get('/findbypattern/:pattern', (req, res) => {
-    var bookcount = mongoose.model('bookinformation', booksSchema);
-    
+    var pattern = req.params.pattern
+    utils.FindByPattern(pattern).then(result=>{
+        res.send({'result' : result});
 
-    bookcount.find({ author: { "$regex": req.params.pattern , "$options": "i" }}, 'bookname').exec(function (err, result) {
-
-        res.send({ 'result': result });
-
-        if (err) return handleError(err);
-    })
+    });
 
 
 
@@ -73,15 +48,11 @@ router.get('/findbypattern/:pattern', (req, res) => {
 
 //get all books of a given genre
 router.get('/findbygenre/:genre', (req, res) => {
-    var bookcount = mongoose.model('bookinformation', booksSchema);
-    var findgenre = req.params.genre
+    var genre = req.params.genre
+    utils.FindByGenre(genre).then(result=>{
+        res.send({'result' : result});
 
-    bookcount.find({ genre: findgenre }, 'bookname').exec(function (err, result) {
-
-        res.send({ 'result': result });
-
-        if (err) return handleError(err);
-    })
+    });
 
 
 
@@ -89,32 +60,13 @@ router.get('/findbygenre/:genre', (req, res) => {
 
 //get all the rented books
 router.get('/rentedcount', (req, res) => {
-    var bookcount = mongoose.model('bookinformation', booksSchema);
-    bookcount.aggregate([
-       
-    {
-        $group : {
-            _id: null,
-            rentedCopies : { $sum : { $subtract: [ '$totalQuantity', '$availableCopies']}}
-    }
-},
-{
-    $project: {
-        _id : 0,
-        rentedCopies : 1
-    }
-}
-], function (err, result) {
-        console.log(result);
-        res.send({ 'result': result });
+    utils.TotalRentedBooks().then(result=>{
+        res.send({'result' : result});
 
-        if (err) return handleError(err);
     });
-
 });
 
 
-//Get the total amount of money spent by a user to rent books in last 100 days
 
 
 

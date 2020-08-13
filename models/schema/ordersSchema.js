@@ -1,11 +1,13 @@
 const mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+let Schema = mongoose.Schema;
 
-var ordersSchema = new Schema({
-    customerId: Number,
-    bookId: String,
+let ordersSchema = new Schema({
+    customerId: {type: Schema.ObjectId , ref: 'customerinformations' },
+    bookId: {type: Schema.ObjectId , ref: 'bookinformations' },
     doi: Date,
-    customerNumber: Number
+    
 });
 
-module.exports = ordersSchema ;
+let ordersModel = mongoose.model('orderinformation', ordersSchema);
+
+module.exports = ordersModel;

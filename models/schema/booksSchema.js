@@ -13,7 +13,9 @@ var booksSchema = new Schema({
     total_quantity : Number,
     available_copies : Number
 });
+let booksModel = mongoose.model('bookinformation', booksSchema)
+module.exports = booksModel;
 
-module.exports = booksSchema ;
+
 
 

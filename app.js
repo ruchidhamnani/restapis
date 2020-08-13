@@ -3,9 +3,8 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-const mongoose = require('mongoose');
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+require('./mongoose.js');
+
 var booksRouter = require('./routes/books');
 var ordersRouter = require('./routes/orders');
 var updatesRouter = require('./routes/updates');
@@ -22,8 +21,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+
 app.use('/books', booksRouter);
 app.use('/orders' , ordersRouter);
 app.use('/updates', updatesRouter);
@@ -42,14 +40,6 @@ app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
-
-//connect to DB
-var mongoDB = 'mongodb://localhost:27017/db_my';
-mongoose.connect(mongoDB, { useNewUrlParser: true });
-
-var db = mongoose.connection;
-
-db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 
 
